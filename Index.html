@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .tab {
+            display: none;
+        }
+        .tab.active {
+            display: block;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="scheduler">
+        <!-- Tab 1: Weekly Volume -->
+        <div class="tab active" id="tab1">
+            <h2>Weekly Volume Input</h2>
+            <label for="weeklyVolume">Enter Weekly Volume:</label>
+            <input type="number" id="weeklyVolume" min="0">
+            <button class="btn" onclick="nextTab(2)">Next</button>
+        </div>
+
+        <!-- Tab 2: Daily Volume Distribution -->
+        <div class="tab" id="tab2">
+            <h2>Daily Volume Distribution</h2>
+            <table>
+                <tr>
+                    <th>Day</th>
+                    <th>Volume (%)</th>
+                    <th>Actual Volume</th>
+                </tr>
+                <tr>
+                    <td>Monday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+                <tr>
+                    <td>Sunday</td>
+                    <td><input type="number" class="daily-percent" min="0" max="100" onchange="calculateVolume()"></td>
+                    <td class="actual-volume">0</td>
+                </tr>
+            </table>
+            <button class="btn" onclick="nextTab(1)">Previous</button>
+            <button class="btn" onclick="nextTab(3)">Next</button>
+        </div>
+
+        <!-- Tab 3: Weekly Off Set -->
+        <div class="tab" id="tab3">
+            <h2>Weekly Off Set</h2>
+            <label>Select Weekly Off Days (2 consecutive days):</label><br>
+            <select id="weeklyOff">
+                <option value="sun-mon">Sunday-Monday</option>
+                <option value="mon-tue">Monday-Tuesday</option>
+                <option value="tue-wed">Tuesday-Wednesday</option>
+                <option value="wed-thu">Wednesday-Thursday</option>
+                <option value="thu-fri">Thursday-Friday</option>
+                <option value="fri-sat">Friday-Saturday</option>
+                <option value="sat-sun">Saturday-Sunday</option>
+            </select>
+            <button class="btn" onclick="nextTab(2)">Previous</button>
+            <button class="btn" onclick="nextTab(4)">Next</button>
+        </div>
+
+        <!-- Tab 4: Metrics -->
+        <div class="tab" id="tab4">
+            <h2>Performance Metrics</h2>
+            <div>
+                <label for="occupancy">Occupancy (%):</label>
+                <input type="number" id="occupancy" min="0" max="100">
+            </div>
+            <div>
+                <label>SLA Type:</label>
+                <select id="slaType">
+                    <option value="hours">Hours</option>
+                    <option value="minutes">Minutes</option>
+                </select>
+                <input type="number" id="slaValue" min="0">
+            </div>
+            <div>
+                <label>Productivity Metric:</label>
+                <select id="productivityType">
+                    <option value="aht">AHT (Minutes)</option>
+                    <option value="iph">IPH</option>
+                </select>
+                <input type="number" id="productivityValue" min="0">
+            </div>
+            <button class="btn" onclick="nextTab(3)">Previous</button>
+            <button class="btn" onclick="calculateSchedule()">Generate Schedule</button>
+        </div>
+    </div>
+
+    <script>
+        function nextTab(tabNumber) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab' + tabNumber).classList.add('active');
+        }
+
+        function calculateVolume() {
+            const weeklyVolume = document.getElementById('weeklyVolume').value;
+            const percentInputs = document.querySelectorAll('.daily-percent');
+            const actualVolumes = document.querySelectorAll('.actual-volume');
+            
+            let total = 0;
+            percentInputs.forEach((input, index) => {
+                if (input.value) {
+                    const volume = (weeklyVolume * input.value) / 100;
+                    actualVolumes[index].textContent = Math.round(volume);
+                    total += parseFloat(input.value);
+                }
+            });
+
+            if (total > 100) {
+                alert('Total percentage cannot exceed 100%');
+            }
+        }
+
+        function calculateSchedule() {
+            // Add your scheduling logic here
+            alert('Schedule generation logic to be implemented based on the inputs');
+        }
+    </script>
+</body>
+</html>
